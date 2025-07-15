@@ -1,46 +1,52 @@
-## 🌪️ Cyclone Intensity Estimator using Satellite Imagery
+# Cyclone Intensity Estimator Using Satellite Imagery
 
-### 🚀 Overview
+## Overview
 
-This project uses satellite infrared imagery from the **INSAT-3D** satellite to estimate the **intensity of tropical cyclones** (in knots) using **deep learning**. A web-based Django interface allows users to upload cyclone images and get real-time intensity predictions powered by the trained model.
-
----
-
-## 📊 Dataset
-
-* **Source**: [Kaggle - INSAT3D Infrared Cyclone Dataset (2013–2021)](https://www.kaggle.com/datasets/sshubam/insat3d-infrared-raw-cyclone-images-20132021)
-* **Input**: Infrared calibrated cyclone images (`.png`)
-* **Label**: Cyclone Intensity (in knots)
-
-> The dataset includes satellite imagery of cyclones over the Indian Ocean, labeled with their intensities.
+This project leverages deep learning to estimate the **intensity of tropical cyclones** using infrared satellite imagery from the **INSAT-3D** satellite. A web-based interface built with **Django** allows users to upload cyclone images and receive real-time predictions of cyclone intensity, measured in knots.
 
 ---
 
-## 🧠 Model Training (Jupyter Notebook)
+## Dataset
 
-The notebook handles everything from data preprocessing to model evaluation.
+* **Source**: [INSAT3D Infrared Cyclone Dataset (2013–2021) – Kaggle](https://www.kaggle.com/datasets/sshubam/insat3d-infrared-raw-cyclone-images-20132021)
+* **Input Format**: Infrared `.png` images of cyclones over the Indian Ocean
+* **Labels**: Cyclone intensities (in knots)
 
-### 🔧 Steps
+---
 
-1. **Load CSV**: Contains image filenames and intensity labels.
-2. **Preprocessing**:
+## Model Training (Jupyter Notebook)
+
+All stages of model training—from preprocessing to evaluation—are implemented in a Jupyter Notebook.
+
+### Training Pipeline
+
+1. **Data Loading**
+
+   * CSV containing image filenames and corresponding intensity labels
+
+2. **Preprocessing**
 
    * Resized all images to 224×224
    * Normalized pixel values
    * Converted to PyTorch tensors
-3. **Model**: Used **EfficientNet-B0** (pretrained on ImageNet), with final layer adapted for regression.
-4. **Training Details**:
 
-   * Loss: MSELoss
-   * Optimizer: Adam
-   * Scheduler: ReduceLROnPlateau
-   * Early Stopping and Model Checkpointing added
-5. **Evaluation**:
+3. **Model Architecture**
 
-   * Final MAE: **\~9.2 knots**
-   * Final RMSE: **\~10.7 knots**
+   * Backbone: **EfficientNet-B0** pretrained on ImageNet
+   * Final layer adapted for regression
 
-### 🧪 Metrics
+4. **Training Configuration**
+
+   * **Loss Function**: Mean Squared Error (MSE)
+   * **Optimizer**: Adam
+   * **Learning Rate Scheduler**: ReduceLROnPlateau
+   * Includes Early Stopping and Model Checkpointing
+
+5. **Evaluation Metrics**
+
+   * Mean Absolute Error (MAE): \~9.2 knots
+   * Root Mean Square Error (RMSE): \~10.7 knots
+   * R² Score: \~0.84
 
 | Metric | Value  |
 | ------ | ------ |
@@ -50,54 +56,54 @@ The notebook handles everything from data preprocessing to model evaluation.
 
 ---
 
-## 🌐 Django Web Application
+## Web Application (Django)
 
-A user-friendly frontend allows users to **upload a satellite image**, and the app returns the predicted cyclone intensity.
+An interactive Django web application allows users to upload infrared cyclone images and get predicted intensity values.
 
-### 🔨 Features
+### Key Features
 
-* Image upload via browser
-* Server-side prediction using trained model
-* Clean and minimal HTML form
-* Result rendered with cyclone intensity
+* Browser-based image upload
+* Server-side preprocessing and inference using the trained model
+* Clean, minimal frontend interface
+* Real-time display of predicted cyclone intensity
 
-### 🔄 Flow
+### Workflow
 
-1. User uploads image via form
-2. Image is saved and passed to `predict.py`
-3. `predict.py` loads `best_model.pt` and preprocesses image
-4. Model predicts intensity and sends it back to frontend
+1. User uploads an image through the frontend form
+2. The image is stored and passed to a prediction script
+3. The model loads `best_model.pt`, processes the image, and performs inference
+4. Predicted intensity is returned and displayed to the user
 
 ---
 
-## 💻 Running the App Locally
+## Running the Application Locally
 
-### 1. Clone the repo
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/Cyclone-Intensity.git
 ```
 
-### 2. Create a virtual environment and install dependencies
+### Step 2: Set Up Virtual Environment
 
 ```bash
 python -m venv venv
-venv\Scripts\activate   # Windows
+venv\Scripts\activate   # For Windows
 pip install -r requirements.txt
 ```
 
-### 3. Run Django server
+### Step 3: Run the Django Development Server
 
 ```bash
 cd Cyclone-Intensity
 python manage.py runserver
 ```
 
-Go to: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+Navigate to [http://127.0.0.1:8000/](http://127.0.0.1:8000/) to access the web interface.
 
 ---
 
-## 🧠 Requirements
+## Requirements
 
 * Python 3.10+
 * PyTorch
@@ -107,7 +113,7 @@ Go to: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 * scikit-learn
 * matplotlib, pandas, numpy
 
-You can install everything using:
+Install all dependencies using:
 
 ```bash
 pip install -r requirements.txt
@@ -115,62 +121,42 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Future Improvements
+## Sample Output
 
-* **Larger Dataset**: Train on extended and higher-resolution satellite datasets (e.g. from GOES, MODIS, ISRO) across multiple ocean basins for better generalization.
+![Cyclone-Image-1](https://github.com/user-attachments/assets/9b6f67d7-583c-48fb-817e-84fa17cb78da)
 
-* **Model Enhancements**:
+![Cyclone](https://github.com/user-attachments/assets/55a88c6e-75d9-4389-8799-dea8a872959b)
 
-  * Add regularization (dropout, label smoothing, weight decay)
-  * Try stronger architectures (EfficientNetV2, Swin Transformer)
-  * Use data augmentation and hyperparameter tuning
-
-* **Automated Image Ingestion**:
-
-  * Integrate satellite APIs (NOAA, NASA Earthdata, ISRO MOSDAC)
-  * Schedule real-time data fetching using Celery or cron jobs
-
-* **Cyclone Detection**:
-
-  * Use object detection (YOLOv8) to localize cyclone regions from raw images
-  * Optionally use segmentation for more precise structures
-
-* **Real-time Alert System**:
-
-  * Trigger alerts (email/SMS/WhatsApp) when intensity crosses critical thresholds
-  * Add region tagging and basic geolocation tracking
-
-* **Interactive Visualization**:
-
-  * Overlay predictions on a map (Leaflet.js, Mapbox)
-  * Display intensity heatmaps and historical trends
-
-* **Hybrid Modeling**:
-
-  * Fuse ML with meteorological features (wind, SST, pressure)
-  * Explore GNNs and LSTMs for spatio-temporal predictions
+![Prediction](https://github.com/user-attachments/assets/1e77712d-d769-4359-b940-3e8044ad6183)
 
 ---
 
-## 📸 Sample Prediction Output
+## Future Enhancements
 
-```text
-Uploaded Image: cyclone_2019_10_28.png
-Predicted Intensity: 102.4 knots
-```
+### Data & Model Improvements
+
+* Expand dataset with high-resolution, multi-basin satellite imagery (e.g., GOES, MODIS)
+* Experiment with advanced architectures (EfficientNetV2, Swin Transformer)
+* Implement regularization techniques and data augmentation
+* Optimize hyperparameters using cross-validation
+
+### Real-Time Integration
+
+* Connect with satellite APIs (NOAA, NASA Earthdata, ISRO MOSDAC)
+* Schedule automatic image ingestion using Celery or cron
+
+### Feature Extensions
+
+* Cyclone localization using object detection models (e.g., YOLOv8)
+* Alert system (email/SMS/WhatsApp) for critical intensity thresholds
+* Integration with mapping libraries (e.g., Mapbox, Leaflet.js) for visualization
+* Combine with meteorological data using hybrid ML models (e.g., LSTM, GNN)
 
 ---
 
-## 👨‍💻 Author
+## Acknowledgements
 
-**Sudarshan Khot**
-*Student, Machine Learning & Web Enthusiast*
-
----
-
-## 🧠 Acknowledgements
-
-* \[INSAT-3D Dataset - ISRO via IMD]
+* \[INSAT-3D Dataset – ISRO via IMD]
 * PyTorch, EfficientNet, Django
 * Kaggle Community
 
