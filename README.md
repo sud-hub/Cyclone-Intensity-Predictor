@@ -115,11 +115,40 @@ pip install -r requirements.txt
 
 ---
 
-## 🏁 Future Improvements
+## 🚀 Future Improvements
 
-* Add cyclone coordinate detection using object detection (e.g., YOLOv8)
-* Expand model to multi-modal input (cloud height, wind speed, etc.)
-* Deploy on AWS/GCP with GPU acceleration
+* **Larger Dataset**: Train on extended and higher-resolution satellite datasets (e.g. from GOES, MODIS, ISRO) across multiple ocean basins for better generalization.
+
+* **Model Enhancements**:
+
+  * Add regularization (dropout, label smoothing, weight decay)
+  * Try stronger architectures (EfficientNetV2, Swin Transformer)
+  * Use data augmentation and hyperparameter tuning
+
+* **Automated Image Ingestion**:
+
+  * Integrate satellite APIs (NOAA, NASA Earthdata, ISRO MOSDAC)
+  * Schedule real-time data fetching using Celery or cron jobs
+
+* **Cyclone Detection**:
+
+  * Use object detection (YOLOv8) to localize cyclone regions from raw images
+  * Optionally use segmentation for more precise structures
+
+* **Real-time Alert System**:
+
+  * Trigger alerts (email/SMS/WhatsApp) when intensity crosses critical thresholds
+  * Add region tagging and basic geolocation tracking
+
+* **Interactive Visualization**:
+
+  * Overlay predictions on a map (Leaflet.js, Mapbox)
+  * Display intensity heatmaps and historical trends
+
+* **Hybrid Modeling**:
+
+  * Fuse ML with meteorological features (wind, SST, pressure)
+  * Explore GNNs and LSTMs for spatio-temporal predictions
 
 ---
 
